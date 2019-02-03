@@ -14,8 +14,10 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/', function () {
-    echo "hello routing-get";
-    // return view('book');
+  $books=Book::all();
+  return view('books',[
+    'books'=>$books
+  ]);
 });
 
 

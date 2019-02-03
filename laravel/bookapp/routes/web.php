@@ -1,7 +1,9 @@
 <?php
 
+use App\Book;
+use Illuminate\Http\Request;
 /*
-|--------------------------------------------------------------------------
+|-----------git add ---------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 |
@@ -11,6 +13,19 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('book');
+// });
+
+Route::middleware(['middleware'=>['web']], function () {
+    Route::get('/', function () {
+        //
+    });
+
+    Route::post('/book', function (Request $request) {
+        //
+    });
+    Route::post('/book/{book}', function (Book $book) {
+        //
+    });
 });

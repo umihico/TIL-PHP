@@ -4,6 +4,9 @@
 </head>
 
 <body>
+  <script type="text/javascript">
+    alert('hello');
+  </script>
   <h1>h1</h1>
   <?php
     echo "a"

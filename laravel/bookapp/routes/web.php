@@ -39,3 +39,5 @@ Route::delete('/book/{book}', function (Book $book) {
     $book->delete();
     return redirect('/');
 });
+
+Route::auth();

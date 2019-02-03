@@ -18,15 +18,10 @@ Route::get('/', function () {
     // return view('book');
 });
 
-Route::middleware(['middleware'=>['web']], function () {
-    Route::get('/', function () {
-        //
-    });
 
-    Route::post('/book', function (Request $request) {
-        //
-    });
-    Route::post('/book/{book}', function (Book $book) {
-        //
-    });
+Route::post('/book', function (Request $request) {
+    //
+});
+Route::post('/book/{book}', function (Book $book) {
+    //
 });

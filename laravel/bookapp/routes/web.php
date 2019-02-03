@@ -14,7 +14,8 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/', function () {
-    return view('book');
+    echo "hello routing-get";
+    // return view('book');
 });
 
 Route::middleware(['middleware'=>['web']], function () {

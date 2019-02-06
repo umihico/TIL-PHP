@@ -27,3 +27,9 @@ Route::get('dynmicpath-handler/{message}', function($message)
 {
     return 'path is' . $message;
 });
+
+Route::get('dynmicpath-handler2/{message}', function($message)
+{
+    return 'Hello World' . $message;
+})
+->where('message', '[A-Za-z]+'); #return 404 if  message doesn't match

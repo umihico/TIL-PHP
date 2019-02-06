@@ -23,3 +23,7 @@ Route::get('/controller','helloController@index');
 Route::get('/secondhello','secondhelloController@index');
 
 Route::get('/dynamichello','dynamichelloController@index');
+Route::get('dynmicpath-handler/{message}', function($message)
+{
+    return 'path is' . $message;
+});

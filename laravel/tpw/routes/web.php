@@ -20,3 +20,4 @@ Route::get('/hello', function () {
 });
 
 Route::get('/controller','helloController@index');
+Route::get('/secondhello','secondhelloController@index');

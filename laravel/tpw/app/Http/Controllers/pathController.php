@@ -12,21 +12,20 @@ class pathController extends Controller
   public function pick_12portfolios_from_all($sortkey, $page_num)
   {
     $portfolios_all = Portfolio::all();
+    foreach ($portfolios_all as $pf) {
+        $portfolios_all2[] = $pf;
+    }
+    $portfolios_all=$portfolios_all2;
     return $this->pick_12portfolios($portfolios_all,$sortkey, $page_num);
   }
   public function pick_12portfolios($portfolios, $sortkey, $page_num)
   {
-    foreach ($portfolios as $portfolio) {
-      $dict_portfolios[$portfolio['full_name']] = $portfolio;
+    foreach ((array) $portfolios as $key => $value) {
+      $sort[$key] = $value[$sortkey];
     }
-    // foreach ((array) $portfolios as $key => $value) {
-    //   echo 'i';
-    //   // var_dump($value);
-    //   $sort[$key] = $value[$sortkey];
-    // }
-    // array_multisort($sort, SORT_DESC, $portfolios);
-    $page_num=intval($page_num);
-    $picked_array=array_slice($dict_portfolios, 0, 13);
+    array_multisort($sort, SORT_DESC, $portfolios);
+    $page_num=intval($page_num)*12;
+    $picked_array=array_slice($portfolios, $page_num, $page_num+12);
     // $pfs = Portfolio::where('username', 'umihico')->get();
     return $picked_array;
   }
@@ -49,7 +48,7 @@ class pathController extends Controller
   {
     $pfs = Portfolio::all();
     foreach ($pfs as $pf) {
-      $geotags=array(json_decode($pf->geotags));
+      $geotags=array(json_decode(str_replace("'","\"",$pf->geotags)))[0];
       if (in_array($location, $geotags)){
         $location_match_portfolios[] = $pf;
       }

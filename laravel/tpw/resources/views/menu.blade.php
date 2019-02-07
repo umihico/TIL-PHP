@@ -1,3 +1,4 @@
+@section('menu')
 <div class="row">
   <div class="col-sm-6 col-md-4">
     <h3><a href="most_stars/0"></a>Most Stars</h3>
@@ -18,3 +19,4 @@
     <h3><a href="purpose">Purposes</a></h3>
   </div>
 </div>
+@endsection

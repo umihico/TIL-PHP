@@ -32,17 +32,17 @@ class pathController extends Controller
   public function most_stars($path)
   {
     $display_portfolios=$this->pick_12portfolios_from_all('stargazers_count', $path);
-    return view("path",['portfolios' => $display_portfolios]);
+    return view("main",['portfolios' => $display_portfolios]);
   }
   public function most_forks($path)
   {
     $display_portfolios=$this->pick_12portfolios_from_all('forks', $path);
-    return view("path",['portfolios' => $display_portfolios]);
+    return view("main",['portfolios' => $display_portfolios]);
   }
   public function recently_update($path)
   {
     $display_portfolios=$this->pick_12portfolios_from_all('pushed_at', $path);
-    return view("path",['portfolios' => $display_portfolios]);
+    return view("main",['portfolios' => $display_portfolios]);
   }
   public function location($location,$num)
   {
@@ -54,16 +54,16 @@ class pathController extends Controller
       }
     }
     $display_portfolios=$this->pick_12portfolios($location_match_portfolios, 'stargazers_count', $num);
-    return view("path",['portfolios' => $display_portfolios]);
+    return view("main",['portfolios' => $display_portfolios]);
   }
   public function all_locations()
   {
     $pfs = Portfolio::all();
-    return view("path",['portfolios' => $pfs]);
+    return view("main",['portfolios' => $pfs]);
   }
   public function all_users()
   {
     $pfs = Portfolio::all();
-    return view("path",['portfolios' => $pfs]);
+    return view("main",['portfolios' => $pfs]);
   }
 }

@@ -1,0 +1,6 @@
+@extends('common')
+@include('geotags')
+@include('menu')
+@include('pagination')
+@include('showcase')
+@include('pagination')

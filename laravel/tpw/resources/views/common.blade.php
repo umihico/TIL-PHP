@@ -2,7 +2,7 @@
 
 <head>
   <link rel="shortcut icon" href="https://umihico.github.io/favicon.ico">
-  <link rel="stylesheet" href="css.css" type="text/css">
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}" type="text/css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <script async defer src="https://buttons.github.io/buttons.js"></script>

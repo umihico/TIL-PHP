@@ -7,7 +7,7 @@ dbname = 'database/database.sqlite'
 
 with closing(sqlite3.connect(dbname)) as conn:
     c = conn.cursor()
-    insert_sql = 'insert into portfolio_list (geotags, full_name, forks, gif_path, gif_success, homepage, homepage_exist, html_url, pushed_at, reponame, skills, stargazers_count, username) values (?,?,?,?,?,?,?,?,?,?,?,?,?)'
+    insert_sql = 'insert into portfolios (geotags, full_name, forks, gif_path, gif_success, homepage, homepage_exist, html_url, pushed_at, reponame, skills, stargazers_count, username) values (?,?,?,?,?,?,?,?,?,?,?,?,?)'
     portfolio_list = [
         (2, 'Shota', 54, 'male'),
         (3, 'Nana', 40, 'female'),

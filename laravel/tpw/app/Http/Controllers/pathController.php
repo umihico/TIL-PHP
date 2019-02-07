@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Portfolio;
 class pathController extends Controller
 {
   public function index($path)
   {
-    return view("path",['hoge' => $path]);
+    $pfs = Portfolio::all();
+    // return view('select')->with('members',$pfs);
+    return view("path",['hoge' => $path, 'portfolios' => $pfs]);
   }
 }

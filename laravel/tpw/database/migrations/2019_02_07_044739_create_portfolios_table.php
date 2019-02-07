@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePortfolioListTable extends Migration
+class CreatePortfoliosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreatePortfolioListTable extends Migration
      */
     public function up()
     {
-        Schema::create('portfolio_list', function (Blueprint $table) {
+        Schema::create('portfolios', function (Blueprint $table) {
           $table->increments('id');
           $table->timestamps();
           $table->integer('forks');
@@ -39,6 +39,6 @@ class CreatePortfolioListTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('portfolio_list');
+        Schema::dropIfExists('portfolios');
     }
 }

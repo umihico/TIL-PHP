@@ -18,5 +18,7 @@ Route::get('/', function () {
 Route::get('/most_stars/{num}','pathController@most_stars');
 Route::get('/most_forks/{num}','pathController@most_forks');
 Route::get('/recently_update/{num}','pathController@recently_update');
+Route::get('/locations/{location}/{num}','pathController@location');
+Route::get('/locations/{num}','pathController@recently_update');
 Route::get('/all_locations','pathController@all_locations');
 Route::get('/all_users','pathController@all_users');

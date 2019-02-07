@@ -8,6 +8,6 @@ class pathController extends Controller
 {
   public function index($path)
   {
-    echo $path;
+    return view("path",['hoge' => $path]);
   }
 }

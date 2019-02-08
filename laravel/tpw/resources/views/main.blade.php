@@ -2,5 +2,5 @@
 @include('geotags',['geotags'=>$geotags])
 @include('menu')
 @include('pagination',['$pagination_bar'=>$pagination_bar])
-@include('showcase')
+@include('showcase',['showcases'=>$showcases])
 @include('pagination',['$pagination_bar'=>$pagination_bar])

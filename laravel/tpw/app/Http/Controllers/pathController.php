@@ -9,21 +9,30 @@ use App\Portfolio;
 
 class pathController extends Controller
 {
+  public function exact_only_okay_portfolios(){
+    $portfolios_okay_all = Portfolio::where("gif_success","1")->get();
+    return $portfolios_okay_all;
+  }
   public function main_view_wrapper($portfolios_all,$display_portfolios, $path, $page_num)
   {
     $geotags=$this->gen_geotags(30);
     $pagination_bar=$this->gen_pagination_bar($portfolios_all, $path, $page_num);
-    return view("main",['path'=>$path,'portfolios' => $display_portfolios,'geotags'=>$geotags,'pagination_bar'=>$pagination_bar]);
+    foreach ($display_portfolios as $display_portfolio) {
+      $skillset=json_decode(str_replace("'","\"",$display_portfolio['skills']));
+      // echo $skillset;
+      $display_portfolio['skills']=$skillset;
+      $showcase=$display_portfolio;
+      // var_dump($showcase);
+      $showcases[]=$showcase;
+    }
+    return view("main",['path'=>$path,'showcases' => $showcases,'geotags'=>$geotags,'pagination_bar'=>$pagination_bar]);
   }
 
   public function gen_pagination_bar($portfolios_all, $path, $page_num)
   {
     $pnum=count($portfolios_all);
     $min_page_num=0;
-    $max_page_num=floor($pnum/12);
-    if ($pnum % 12>0){
-      $max_page_num++;
-    }
+    $max_page_num=ceil($pnum/12)-1;
     $pagebar_nums=array($page_num-2,$page_num-1,$page_num,$page_num+1,$page_num+2);
     $pagebar_nums = array_diff($pagebar_nums, array(-2,-1,$max_page_num+1,$max_page_num+2));
     $pagebar_nums = array_values($pagebar_nums);
@@ -46,7 +55,7 @@ class pathController extends Controller
     return $pagebar_nums;
   }
   public function gen_geotags($num){
-    $portfolios_all = Portfolio::all();
+    $portfolios_all = $this->exact_only_okay_portfolios();
     foreach ($portfolios_all as $pf) {
         $geotags=array(json_decode(str_replace("'","\"",$pf->geotags)))[0];
         $geotags_list[] = $geotags;
@@ -76,31 +85,30 @@ class pathController extends Controller
     array_multisort($sort, SORT_DESC, $portfolios);
     $page_num=intval($page_num)*12;
     $picked_array=array_slice($portfolios, $page_num, $page_num+12);
-    // $pfs = Portfolio::where('username', 'umihico')->get();
     return $picked_array;
   }
   public function most_stars($num)
   {
 
-    $portfolios_all = Portfolio::all();
+    $portfolios_all = $this->exact_only_okay_portfolios();
     $display_portfolios=$this->pick_12portfolios($portfolios_all,'stargazers_count', $num);
     return $this->main_view_wrapper($portfolios_all,$display_portfolios,"most_stars",$num);
   }
   public function most_forks($num)
   {
-    $portfolios_all = Portfolio::all();
+    $portfolios_all = $this->exact_only_okay_portfolios();
     $display_portfolios=$this->pick_12portfolios($portfolios_all, 'forks', $num);
     return $this->main_view_wrapper($portfolios_all,$display_portfolios,"most_forks",$num);
   }
   public function recently_update($num)
   {
-    $portfolios_all = Portfolio::all();
+    $portfolios_all = $this->exact_only_okay_portfolios();
     $display_portfolios=$this->pick_12portfolios($portfolios_all, 'pushed_at', $num);
     return $this->main_view_wrapper($portfolios_all,$display_portfolios,"recently_update",$num);
   }
   public function location($location,$num)
   {
-    $portfolios_all = Portfolio::all();
+    $portfolios_all = $this->exact_only_okay_portfolios();
     foreach ($portfolios_all as $pf) {
       $geotags=array(json_decode(str_replace("'","\"",$pf->geotags)))[0];
       if (in_array($location, $geotags)){

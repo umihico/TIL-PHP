@@ -1,5 +1,7 @@
 @section('geotags')
 <div class="locations">
-  <h1>geotag here!</h1>
+  @foreach($geotags as $geotag=>$count)
+    <a href="/location/{{ $geotag }}/0">{{ $geotag }}({{ $count }})</a>　
+  @endforeach
 </div>
 @endsection

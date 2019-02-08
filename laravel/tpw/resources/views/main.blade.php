@@ -1,5 +1,5 @@
 @extends('common')
-@include('geotags')
+@include('geotags',['geotags'=>$geotags])
 @include('menu')
 @include('pagination')
 @include('showcase')

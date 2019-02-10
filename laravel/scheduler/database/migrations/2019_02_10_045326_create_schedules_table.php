@@ -17,7 +17,7 @@ class CreateSchedulesTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->string('name');
-            $table->string('time', 12);
+            $table->string('date', 8);
         });
     }
 

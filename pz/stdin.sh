@@ -1,24 +1,37 @@
 php solver.php<< EOF
-2 2 2
-1 2
-2 1
-4
-1 1 2 1
-1 1 1 2
-1 1 2 2
-1 2 2 1
+2 2
+2 1 1 1
+8
+m F
+t R
+m F
+m F
+t B
+m L
+m L
+m B
 EOF
 php solver.php<< EOF
-2 5 3
-5 8 8 6 3
-3 6 3 3 5
-8
-1 4 2 2
-1 3 2 1
-2 4 2 3
-1 3 1 5
-2 5 1 1
-2 1 1 2
-1 5 2 1
-1 2 1 3
+621 -855
+2 6 3 6
+19
+t L
+t L
+t R
+m L
+m B
+t R
+t L
+t L
+t B
+t B
+m R
+t B
+m R
+t R
+t L
+t B
+m L
+m R
+t L
 EOF

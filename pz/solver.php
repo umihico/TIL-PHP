@@ -17,48 +17,61 @@ function stdin_to_intvals() {
 }
 function stdin_handler()
 {
-  list($H, $W, $player_num)=stdin_to_intvals();
-  for($i=0;$i<$H;++$i){
-    $cards[]=stdin_to_intvals();
+  list($first_x, $first_y)=stdin_to_intvals();
+  list($jump_power_front, $jump_power_right,$jump_power_back,$jump_power_left)=stdin_to_intvals();
+  $n=stdin_to_intval();
+  for($i=0;$i<$n;++$i){
+    $orders[]=explode(' ',trim(fgets(STDIN)));
   }
-  $pick_history_num=stdin_to_intval();
-  for($i=0;$i<$pick_history_num;++$i){
-    $pick_history[]=stdin_to_intvals();
-  }
-  return array($H, $W, $player_num,$cards,$pick_history);
+  return array($first_x, $first_y, $jump_power_front, $jump_power_right,$jump_power_back,$jump_power_left,$orders);
 }
 
-function is_same($picked_card_info,$cards)
+function multiply_directions($direction,$order_direction)
 {
-  list($ay,$ax,$by,$bx)=$picked_card_info;
-  // var_dump( array($cards[$ay-1][$ax-1],$cards[$by-1][$bx-1]));
-  if ($cards[$ay-1][$ax-1]==$cards[$by-1][$bx-1]){
-    // echo "true";
-    return true;
-  } else {
-    // echo "false";
-    return false;
-  }
-
+  $direction_to_clock = array(
+    "F" => 0,
+    "R" => 3,
+    "B" => 6,
+    "L" => 9,
+  );
+  $clock_direction=($direction_to_clock[$direction]+$direction_to_clock[$order_direction])% 12;
+  $moving_direction=array_flip($direction_to_clock)[$clock_direction];
+  return $moving_direction;
 }
 
-function solve($H, $W, $player_num,$cards,$pick_history)
+function move($x,$y,$moving_direction,$jump_power)
 {
-  $player_scores=array_fill(0,$player_num,0);
-  $current_player_id=0;
-  foreach ($pick_history as $picked_card_info) {
-    if (is_same($picked_card_info,$cards)){
-      $player_scores[$current_player_id]++;
+  $direction_base_funcs = array(
+    "F" => array(0,1),
+    "R" => array(1,0),
+    "B" => array(0,-1),
+    "L" => array(-1,0)
+  );
+  $x_jump_power=$direction_base_funcs[$moving_direction][0] * $jump_power;
+  $y_jump_power=$direction_base_funcs[$moving_direction][1] * $jump_power;
+  return array($x_jump_power+$x,$y_jump_power+$y);
+}
+function solve($first_x, $first_y, $jump_power_front, $jump_power_right,$jump_power_back,$jump_power_left,$orders)
+{
+  $x=$first_x;
+  $y=$first_y;
+  $direction="F";
+  $jump_powers = array(
+    "F" => $jump_power_front,
+    "R" => $jump_power_right,
+    "B" => $jump_power_back,
+    "L" => $jump_power_left
+  );
+  foreach ($orders as $order) {
+    if ($order[0]=="m") {
+      $moving_direction=multiply_directions($direction,$order[1]);
+      $jump_power=$jump_powers[$order[1]];
+      list($x,$y)=move($x,$y,$moving_direction,$jump_power);
     } else {
-      $current_player_id++;
-      if ($current_player_id==$player_num) {
-        $current_player_id=0;
-      }
+      $direction=multiply_directions($direction,$order[1]);
     }
   }
-  foreach ($player_scores as $player_score) {
-    echo 2*$player_score."\n";
-  }
+  echo $x." ".$y;
 }
 function main()
 {

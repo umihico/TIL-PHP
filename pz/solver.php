@@ -17,77 +17,42 @@ function stdin_to_intvals() {
 }
 function stdin_handler()
 {
-  $n=stdin_to_intval();
-  for($i=0;$i<$n;++$i){
-    $grid[]=stdin_to_intvals();
+  $repeat_num=stdin_to_intval();
+  $boxsize=stdin_to_intval();
+  for($i=0;$i<$boxsize;++$i){
+    $rows[]=trim(fgets(STDIN));
   }
-  return array($grid);
+  return array($repeat_num,$rows);
 }
 
-function iter_randomly_filled_grid($grid) {
-  foreach ($grid as $r => $row) {
-    foreach ($row as $c => $num) {
-      if ($num==0){
-      $zero_addresses[]=array($r,$c);
+function multiply_rows($rows)
+{
+  $n=count($rows);
+  $new_rows=array();
+  for ($r=0; $r < $n*$n; $r++) {
+    $new_row=array();
+    $origin_r=$r % $n;
+    for ($c=0; $c < $n*$n; $c++) {
+      $origin_c=$c % $n;
+      if (str_split($rows[$origin_r])[$origin_c]=="#" && str_split($rows[floor($r/$n)])[floor($c/$n)]=="#"){
+        $new_row[]="#";
+      } else {
+        $new_row[]=".";
       }
     }
+    $new_row_str = implode("",$new_row);
+    $new_rows[]=$new_row_str;
   }
-  // var_dump($zero_addresses);
-  for ($i=0; $i < count($grid)*count($grid); $i++) {
-    $grid[$zero_addresses[0][0]][$zero_addresses[0][1]]=$i+1;
-    for ($j=0; $j < count($grid)*count($grid); $j++) {
-      $grid[$zero_addresses[1][0]][$zero_addresses[1][1]]=$j+1;
-      yield $grid;
-    }
-  }
-}
-function is_valid($grid)
-{
-  $n=count($grid);
-  for ($i=0; $i < $n; $i++) {
-      $row=$grid[$i];
-      $sums[]=array_sum($row);
-  }
-  for ($c=0; $c < $n; $c++) {
-    $nums=array();
-    for ($r=0; $r < $n; $r++) {
-      $nums[]=$grid[$r][$c];
-    }
-    $sums[]=array_sum($nums);
-  }
-  $nums=array();
-  for ($i=0; $i < $n ; $i++) {
-    $nums[]=$grid[$i][$i];
-  }
-  $sums[]=array_sum($nums);
-  // $nums=array();
-  // for ($i=0; $i < $n ; $i++) {
-  //   $nums[]=$grid[$n-$i-1][$i];
-  // }
-  // $sums[]=array_sum($nums);
-  // var_dump($sums);
-  if (min($sums)!=max($sums)) {
-    return false;
-  } else {
-    return true;
-
-  }
-}
-function echo_grid($grid)
-{
-  foreach ($grid as $row) {
-    echo implode(" ", $row)."\n";
-  }
+  return $new_rows;
 }
 
-function solve($grid)
+function solve($repeat_num,$rows)
 {
-  foreach (iter_randomly_filled_grid($grid) as $randomly_filled_grid) {
-    // var_dump($randomly_filled_grid);
-    if (is_valid($randomly_filled_grid)) {
-      echo_grid($randomly_filled_grid);
-      return;
-    }
+  for ($i=0; $i < $repeat_num; $i++) {
+    $rows=multiply_rows($rows);
+  }
+  foreach ($rows as $row) {
+    echo $row."\n";
   }
 }
 function main()

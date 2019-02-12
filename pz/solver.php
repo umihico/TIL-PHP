@@ -18,32 +18,76 @@ function stdin_to_intvals() {
 function stdin_handler()
 {
   $n=stdin_to_intval();
-  $answer=trim(fgets(STDIN));
   for($i=0;$i<$n;++$i){
-    $keywords[]=trim(fgets(STDIN));
+    $grid[]=stdin_to_intvals();
   }
-  return array($answer,$keywords);
+  return array($grid);
 }
 
-function echo_result($answer,$keyword) {
-  if (preg_match("/".$answer."/", $keyword)){
-    echo "valid\n";
-    return;
-  }
-  for($i=0;$i<strlen($answer);++$i){
-    list($front,$back)=explode(",",substr_replace($answer, ",", $i, 0));
-    if (preg_match("/".$front."[a-z]{0,1}".$back."/", $keyword)){
-      echo "valid\n";
-      return;
+function iter_randomly_filled_grid($grid) {
+  foreach ($grid as $r => $row) {
+    foreach ($row as $c => $num) {
+      if ($num==0){
+      $zero_addresses[]=array($r,$c);
+      }
     }
   }
-  echo "invalid\n";
+  // var_dump($zero_addresses);
+  for ($i=0; $i < count($grid)*count($grid); $i++) {
+    $grid[$zero_addresses[0][0]][$zero_addresses[0][1]]=$i+1;
+    for ($j=0; $j < count($grid)*count($grid); $j++) {
+      $grid[$zero_addresses[1][0]][$zero_addresses[1][1]]=$j+1;
+      yield $grid;
+    }
+  }
+}
+function is_valid($grid)
+{
+  $n=count($grid);
+  for ($i=0; $i < $n; $i++) {
+      $row=$grid[$i];
+      $sums[]=array_sum($row);
+  }
+  for ($c=0; $c < $n; $c++) {
+    $nums=array();
+    for ($r=0; $r < $n; $r++) {
+      $nums[]=$grid[$r][$c];
+    }
+    $sums[]=array_sum($nums);
+  }
+  $nums=array();
+  for ($i=0; $i < $n ; $i++) {
+    $nums[]=$grid[$i][$i];
+  }
+  $sums[]=array_sum($nums);
+  // $nums=array();
+  // for ($i=0; $i < $n ; $i++) {
+  //   $nums[]=$grid[$n-$i-1][$i];
+  // }
+  // $sums[]=array_sum($nums);
+  // var_dump($sums);
+  if (min($sums)!=max($sums)) {
+    return false;
+  } else {
+    return true;
+
+  }
+}
+function echo_grid($grid)
+{
+  foreach ($grid as $row) {
+    echo implode(" ", $row)."\n";
+  }
 }
 
-function solve($answer,$keywords)
+function solve($grid)
 {
-  foreach ($keywords as $keyword) {
-    echo_result($answer,$keyword);
+  foreach (iter_randomly_filled_grid($grid) as $randomly_filled_grid) {
+    // var_dump($randomly_filled_grid);
+    if (is_valid($randomly_filled_grid)) {
+      echo_grid($randomly_filled_grid);
+      return;
+    }
   }
 }
 function main()

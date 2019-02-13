@@ -16,28 +16,30 @@ function stdin_to_intvals() {
 }
 function stdin_handler()
 {
-  list($n,$meter)=stdin_to_intvals();
-  for ($i=0; $i <$n ; $i++) {
-    $taxies[]=stdin_to_intvals();
-  }
-  return array($meter,$taxies);
+  list($y_size,$x_size)=stdin_to_intvals();
+  list($a1,$b1)=stdin_to_intvals();
+  list($a2,$b2)=stdin_to_intvals();
+
+
+
+  return array($y_size,$x_size,$a1,$b1,$a2,$b2);
 }
 
-function calc_fare($meter,$taxi)
+
+function solve($y_size,$x_size,$a1,$b1,$a2,$b2)
 {
-  list($first_dis,$first_fare,$per_dis,$per_fare)=$taxi;
-  if ($meter<$first_dis){
-    return $first_fare;
+  $x_diff=$b1-$a1;
+  $y_diff=$a2-$a1;
+  $y_diff_adj=($a2-$a1)-($b2-$b1);
+  for ($r=0; $r < $y_size; $r++) {
+    $row=array();
+    $x_diff_row=$x_diff-($y_diff_adj*$r);
+    for ($c=0; $c < $x_size; $c++) {
+      $row[]=$a1+($c*$x_diff_row)+($r*$y_diff);
+    }
+    echo implode(" ",$row)."\n";
   }
-  $rest_meter=$meter-$first_dis;
-  return $first_fare+((floor($rest_meter/$per_dis)+1)*$per_fare);
-}
-function solve($meter,$taxies)
-{
-  foreach ($taxies as $taxi) {
-    $fares[]=calc_fare($meter,$taxi);
-  }
-  echo min($fares)." ".max($fares);
+
 }
 function main()
 {

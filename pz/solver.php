@@ -16,43 +16,49 @@ function stdin_to_intvals() {
 }
 function stdin_handler()
 {
-  $col_num=stdin_to_intval();
-  $columns=explode(" ",trim(fgets(STDIN)));
-  $row_num=stdin_to_intval();
-  for ($i=0; $i < $row_num; $i++) {
-    $rows[]=explode(" ",trim(fgets(STDIN)));
+  list($field_num,$rabit_num,$repeat_num)=stdin_to_intvals();
+  for ($i=0; $i <$rabit_num ; $i++) {
+    $rabbit_ads[]=stdin_to_intval()-1;
   }
-  return array($col_num,$columns,$row_num,$rows);
+  return array($field_num,$rabit_num,$repeat_num,$rabbit_ads);
 }
 
-
-function solve($col_num,$columns,$row_num,$rows)
+function jump($field_num,$rabit_num,$rabbit_ads)
 {
-  for ($c=0; $c < $col_num; $c++) {
-    $len_nums=array();
-    $len_nums[]=strlen($columns[$c]);
-    foreach ($rows as $row) {
-      $len_nums[]=strlen($row[$c]);
+  for ($rabit_id=0; $rabit_id < $rabit_num; $rabit_id++) {
+    $rabit_pos=$rabbit_ads[$rabit_id];
+    $jumped=false;
+    for ($next_pos=$rabit_pos; $next_pos < $field_num; $next_pos++) {
+      // echo $rabit_id.",".$next_pos."\n";
+      if (! array_key_exists($next_pos,array_flip($rabbit_ads))) {
+        $rabbit_ads[$rabit_id]=$next_pos;
+        $jumped=true;
+        break;
+      }
     }
-    $col_max_len=max($len_nums);
-    $columns[$c]=" ".$columns[$c].str_repeat(" ",$col_max_len-strlen($columns[$c]))." ";
-    $horizon_bar[$c]=str_repeat("-",strlen($columns[$c]));
-    for ($r=0; $r < $row_num ; $r++) {
-      $tmp= " ".$rows[$r][$c].str_repeat(" ",$col_max_len-strlen($rows[$r][$c]))." ";
-      // echo $tmp;
-      $rows[$r][$c]=$tmp;
-      // var_dump($rows[$r]);
-      // code...
+    if (! $jumped){
+      for ($next_pos=0; $next_pos < $rabit_pos; $next_pos++) {
+        // echo $rabit_id.",".$next_pos."\n";
+        if (! array_key_exists($next_pos,array_flip($rabbit_ads))) {
+          $rabbit_ads[$rabit_id]=$next_pos;
+          break;
+        }
+      }
     }
-
+    // break;
   }
-  echo "|".implode("|",$columns)."|\n";
-  echo "|".implode("|",$horizon_bar)."|\n";
-  foreach ($rows as $row) {
-    echo "|".implode("|",$row)."|\n";
+  return $rabbit_ads;
+}
+
+function solve($field_num,$rabit_num,$repeat_num,$rabbit_ads)
+{
+  for ($i=0; $i < $repeat_num; $i++) {
+    $rabbit_ads=jump($field_num,$rabit_num,$rabbit_ads);
+    // break;
   }
-
-
+  foreach ($rabbit_ads as $rabbit_ad) {
+    echo ($rabbit_ad+1)."\n";
+  }
 }
 function main()
 {

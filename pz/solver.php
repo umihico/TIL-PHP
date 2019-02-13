@@ -16,52 +16,28 @@ function stdin_to_intvals() {
 }
 function stdin_handler()
 {
-  $n=stdin_to_intval();
+  list($n,$meter)=stdin_to_intvals();
   for ($i=0; $i <$n ; $i++) {
-    $words[]=trim(fgets(STDIN));
+    $taxies[]=stdin_to_intvals();
   }
-  return array($words);
-}
-function startsWith($word, $letters) {
-    return (strpos($word, $letters) === 0);
-}
-function endsWith($word, $letters) {
-    return (strlen($word) > strlen($letters)) ? (substr($word, -strlen($letters)) == $letters) : false;
-}
-function edit($word)
-{
-    $es_words=array("s", "sh", 'ch', 'o', 'x');
-    foreach ($es_words as $es_word) {
-      if (endsWith($word, $es_word)){
-        return $word."es";
-      }
-    }
-    $ves_words=array( 'f', 'fe' );
-    foreach ($ves_words as $ves_word) {
-      if (endsWith($word, $ves_word)){
-        return substr($word, 0, -strlen($ves_word))."ves";
-      }
-    }
-    $vowy_words=array('ay','iy','uy','ey','oy');
-    if (endsWith($word, "y")){
-      $ends_without_vow_sounds=false;
-      foreach ($vowy_words as $vowy_word) {
-        if (endsWith($word, $vowy_word)){
-          $ends_without_vow_sounds=true;
-        }
-      }
-      if (! $ends_without_vow_sounds){
-        return substr($word, 0, -1)."ies";
-      }
-    }
-    return $word.'s';
+  return array($meter,$taxies);
 }
 
-function solve($words)
+function calc_fare($meter,$taxi)
 {
-  foreach ($words as $word) {
-    echo edit($word)."\n";
+  list($first_dis,$first_fare,$per_dis,$per_fare)=$taxi;
+  if ($meter<$first_dis){
+    return $first_fare;
   }
+  $rest_meter=$meter-$first_dis;
+  return $first_fare+((floor($rest_meter/$per_dis)+1)*$per_fare);
+}
+function solve($meter,$taxies)
+{
+  foreach ($taxies as $taxi) {
+    $fares[]=calc_fare($meter,$taxi);
+  }
+  echo min($fares)." ".max($fares);
 }
 function main()
 {

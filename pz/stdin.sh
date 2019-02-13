@@ -1,21 +1,18 @@
 php solver.php<< EOF
-3
-dog
-cat
-pig
+2 700
+600 200 200 400
+900 800 400 500
 EOF
+echo
 php solver.php<< EOF
-7
-box
-photo
-axis
-dish
-church
-leaf
-knife
+2 8000
+2000 730 280 90
+1052 410 237 80
 EOF
+echo
 php solver.php<< EOF
-2
-study
-play
+3 600
+600 200 200 400
+900 800 400 500
+200 200 200 300
 EOF

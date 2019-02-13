@@ -1,13 +1,20 @@
 php solver.php<< EOF
-2
-2
-#.
-##
+7 3 4
+2 1
+DRRUULL
 EOF
 php solver.php<< EOF
-1
-3
-#.#
-.#.
-#.#
+19 9 3
+1 1
+DDDDDDDDRUUUUUUUURD
+EOF
+php solver.php<< EOF
+5 3 3
+2 2
+RULDL
+EOF
+php solver.php<< EOF
+40 7 9
+6 5
+RRDRRLLRRUDLRULRDLUDURULDLULUUUUDDDURRLR
 EOF

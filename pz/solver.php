@@ -13,53 +13,125 @@ function stdin_to_intvals() {
     }
     return $vals;
     // list($a, $b, $c)=stdin_to_intvals();
-    // var_dump(stdin_to_intvals());
 }
 function stdin_handler()
 {
-  $repeat_num=stdin_to_intval();
-  $boxsize=stdin_to_intval();
-  for($i=0;$i<$boxsize;++$i){
-    $rows[]=trim(fgets(STDIN));
-  }
-  return array($repeat_num,$rows);
+  list($dice_roll_nums,$y_size,$x_size)=stdin_to_intvals();
+  list($dice_y,$dice_x)=stdin_to_intvals();
+  $dice_history=trim(fgets(STDIN));
+  return array($dice_roll_nums,$y_size,$x_size,$dice_y,$dice_x,$dice_history);
 }
 
-function multiply_rows($rows)
+class Dice
 {
-  $n=count($rows);
-  $new_rows=array();
-  for ($r=0; $r < $n*$n; $r++) {
-    $new_row=array();
-    $origin_r=$r % $n;
-    for ($c=0; $c < $n*$n; $c++) {
-      $origin_c=$c % $n;
-      if (str_split($rows[$origin_r])[$origin_c]=="#" && str_split($rows[floor($r/$n)])[floor($c/$n)]=="#"){
-        $new_row[]="#";
-      } else {
-        $new_row[]=".";
-      }
+
+  function __construct($y,$x)
+  {
+    $this->y=$y;
+    $this->x=$x;
+    $this->surface_dict= array(
+      1 => 'top',
+      6 => 'buttom',
+      5 => 'south',
+      2 => 'north',
+      4 => 'east',
+      3 => 'west',
+    );
+    $this->buttom=array_flip($this->surface_dict)['buttom'];
+  }
+  function set_new_pos($direction){
+    $position_dict = array(
+      "U"=> array(1,0),
+      "D"=> array(-1,0),
+      "L"=> array(0,-1),
+      "R"=> array(0,1)
+    );
+    $y_adj_x_adj=$position_dict[$direction];
+    list($y_adj,$x_adj)=$position_dict[$direction];
+    $this->y=$this->y+$y_adj;
+    $this->x=$this->x+$x_adj;
+  }
+
+  function set_new_surface($direction) {
+    $surface_dict = array(
+      "U"=> array(
+        'top' => 'north',
+        'buttom' => 'south',
+        'east' => 'east',
+        'north' => 'buttom',
+        'west' => 'west',
+        'south' => 'top'
+      ),
+      "D"=> array(
+        'top' => 'south',
+        'buttom' => 'north',
+        'east' => 'east',
+        'north' => 'top',
+        'west' => 'west',
+        'south' => 'buttom'
+      ),
+      "L"=> array(
+        'top' => 'west',
+        'buttom' => 'east',
+        'east' => 'top',
+        'north' => 'north',
+        'west' => 'buttom',
+        'south' => 'south'
+      ),
+      "R"=> array(
+        'top' => 'east',
+        'buttom' => 'west',
+        'east' => 'buttom',
+        'north' => 'north',
+        'west' => 'top',
+        'south' => 'south'
+      )
+    );
+    $direction_selected_surface_dict=$surface_dict[$direction];
+    foreach ($this->surface_dict as $num => $facing) {
+      // echo $num.$facing."\n";
+      $new_facing=$direction_selected_surface_dict[$facing];
+
+      // echo $new_facing."\n";
+      $new_surface_dict[$num]=$new_facing;
+
     }
-    $new_row_str = implode("",$new_row);
-    $new_rows[]=$new_row_str;
+    $this->surface_dict=$new_surface_dict;
+    $this->buttom=array_flip($this->surface_dict)['buttom'];
   }
-  return $new_rows;
+  function roll($direction)
+  {
+    $this->set_new_pos($direction);
+    $this->set_new_surface($direction);
+  }
 }
 
-function solve($repeat_num,$rows)
+
+function solve($dice_roll_nums,$y_size,$x_size,$dice_y,$dice_x,$dice_history)
 {
-  for ($i=0; $i < $repeat_num; $i++) {
-    $rows=multiply_rows($rows);
+  $paper=array();
+  for ($i=0; $i < $y_size; $i++) {
+    $paper[]=array_fill(0,$x_size,0);
   }
-  foreach ($rows as $row) {
-    echo $row."\n";
+  foreach ($paper as $row) {
+    echo implode(" ",$row)."\n";
+  }
+  $dice = new Dice($dice_y,$dice_x);
+  $paper[$dice_y][$dice_x]=$dice->buttom;
+  foreach (str_split($dice_history) as $direction) {
+    $dice->roll($direction);
+    $paper[$dice->y][$dice->x]=$dice->buttom;
+    // echo "pos".$dice->y.','.$dice->x."=".$paper[$dice->y][$dice->x]."\n";
+  }
+  echo "count".count($paper)."\n";
+  foreach ($paper as $row) {
+    echo implode(" ",$row)."\n";
   }
 }
 function main()
 {
   solve(...stdin_handler());
 }
-
 
 main();
 

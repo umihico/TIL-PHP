@@ -16,29 +16,34 @@ function stdin_to_intvals() {
 }
 function stdin_handler()
 {
-  list($y_size,$x_size)=stdin_to_intvals();
-  list($a1,$b1)=stdin_to_intvals();
-  list($a2,$b2)=stdin_to_intvals();
+  list($repeat_num,$map)=explode(' ',trim(fgets(STDIN)));
+  $map=str_split($map);
+  $word=trim(fgets(STDIN));
 
 
 
-  return array($y_size,$x_size,$a1,$b1,$a2,$b2);
+  return array($repeat_num,$map,$word);
 }
 
 
-function solve($y_size,$x_size,$a1,$b1,$a2,$b2)
+function solve($repeat_num,$map,$word)
 {
-  $x_diff=$b1-$a1;
-  $y_diff=$a2-$a1;
-  $y_diff_adj=($a2-$a1)-($b2-$b1);
-  for ($r=0; $r < $y_size; $r++) {
-    $row=array();
-    $x_diff_row=$x_diff-($y_diff_adj*$r);
-    for ($c=0; $c < $x_size; $c++) {
-      $row[]=$a1+($c*$x_diff_row)+($r*$y_diff);
-    }
-    echo implode(" ",$row)."\n";
+  $base_alphas = range('a', 'z');
+  foreach ($map as $i=>$letter) {
+    $new_map[$letter]=$base_alphas[$i];
   }
+  $new_map[" "]=" ";
+  for ($i=0; $i < $repeat_num; $i++) {
+    $split_word=str_split($word);
+    $new_word=array();
+    foreach ($split_word as $letter) {
+      $new_letter=$new_map[$letter];
+      $new_word[]=$new_letter;
+    }
+    $word=implode("",$new_word);
+    // code...
+  }
+  echo $word;
 
 }
 function main()

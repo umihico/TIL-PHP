@@ -1,12 +1,10 @@
 php solver.php<< EOF
-5 5
-1 2
-3 4
+1 qwertyuiopasdfghjklzxcvbnm
+hqomq gfsoft iqeaqzigf
 EOF
 echo
 php solver.php<< EOF
-5 7
-1 5
--2 1
+100 poiuytrewqlkjhgfdsamnbvcxz
+snn xufu ngebmv qwtg
 EOF
 echo

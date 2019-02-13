@@ -1,20 +1,20 @@
 php solver.php<< EOF
-7 3 4
-2 1
-DRRUULL
+2
+id name
+3
+1 ito
+2 sakakibara
+3 takahashi
 EOF
 php solver.php<< EOF
-19 9 3
-1 1
-DDDDDDDDRUUUUUUUURD
-EOF
-php solver.php<< EOF
-5 3 3
-2 2
-RULDL
-EOF
-php solver.php<< EOF
-40 7 9
-6 5
-RRDRRLLRRUDLRULRDLUDURULDLULUUUUDDDURRLR
+6
+name english math japanese science socialstudies
+7
+aoyama 70 82 66 79 90
+okada 44 65 57 69 88
+koyama 52 47 61 23 71
+takeda 48 58 80 34 93
+nakano 55 39 62 77 80
+miura 23 40 35 46 53
+yagami 91 92 95 90 100
 EOF

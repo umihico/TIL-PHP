@@ -16,48 +16,51 @@ function stdin_to_intvals() {
 }
 function stdin_handler()
 {
-  list($field_num,$rabit_num,$repeat_num)=stdin_to_intvals();
-  for ($i=0; $i <$rabit_num ; $i++) {
-    $rabbit_ads[]=stdin_to_intval()-1;
+  $n=stdin_to_intval();
+  for ($i=0; $i <$n ; $i++) {
+    $words[]=trim(fgets(STDIN));
   }
-  return array($field_num,$rabit_num,$repeat_num,$rabbit_ads);
+  return array($words);
 }
-
-function jump($field_num,$rabit_num,$rabbit_ads)
+function startsWith($word, $letters) {
+    return (strpos($word, $letters) === 0);
+}
+function endsWith($word, $letters) {
+    return (strlen($word) > strlen($letters)) ? (substr($word, -strlen($letters)) == $letters) : false;
+}
+function edit($word)
 {
-  for ($rabit_id=0; $rabit_id < $rabit_num; $rabit_id++) {
-    $rabit_pos=$rabbit_ads[$rabit_id];
-    $jumped=false;
-    for ($next_pos=$rabit_pos; $next_pos < $field_num; $next_pos++) {
-      // echo $rabit_id.",".$next_pos."\n";
-      if (! array_key_exists($next_pos,array_flip($rabbit_ads))) {
-        $rabbit_ads[$rabit_id]=$next_pos;
-        $jumped=true;
-        break;
+    $es_words=array("s", "sh", 'ch', 'o', 'x');
+    foreach ($es_words as $es_word) {
+      if (endsWith($word, $es_word)){
+        return $word."es";
       }
     }
-    if (! $jumped){
-      for ($next_pos=0; $next_pos < $rabit_pos; $next_pos++) {
-        // echo $rabit_id.",".$next_pos."\n";
-        if (! array_key_exists($next_pos,array_flip($rabbit_ads))) {
-          $rabbit_ads[$rabit_id]=$next_pos;
-          break;
+    $ves_words=array( 'f', 'fe' );
+    foreach ($ves_words as $ves_word) {
+      if (endsWith($word, $ves_word)){
+        return substr($word, 0, -strlen($ves_word))."ves";
+      }
+    }
+    $vowy_words=array('ay','iy','uy','ey','oy');
+    if (endsWith($word, "y")){
+      $ends_without_vow_sounds=false;
+      foreach ($vowy_words as $vowy_word) {
+        if (endsWith($word, $vowy_word)){
+          $ends_without_vow_sounds=true;
         }
       }
+      if (! $ends_without_vow_sounds){
+        return substr($word, 0, -1)."ies";
+      }
     }
-    // break;
-  }
-  return $rabbit_ads;
+    return $word.'s';
 }
 
-function solve($field_num,$rabit_num,$repeat_num,$rabbit_ads)
+function solve($words)
 {
-  for ($i=0; $i < $repeat_num; $i++) {
-    $rabbit_ads=jump($field_num,$rabit_num,$rabbit_ads);
-    // break;
-  }
-  foreach ($rabbit_ads as $rabbit_ad) {
-    echo ($rabbit_ad+1)."\n";
+  foreach ($words as $word) {
+    echo edit($word)."\n";
   }
 }
 function main()

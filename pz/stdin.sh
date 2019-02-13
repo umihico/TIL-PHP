@@ -1,12 +1,21 @@
 php solver.php<< EOF
-5 2 2
-1
-2
-EOF
-echo ""
-php solver.php<< EOF
-6 3 6
-1
 3
-5
+dog
+cat
+pig
+EOF
+php solver.php<< EOF
+7
+box
+photo
+axis
+dish
+church
+leaf
+knife
+EOF
+php solver.php<< EOF
+2
+study
+play
 EOF

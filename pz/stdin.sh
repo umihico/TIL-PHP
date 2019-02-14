@@ -1,15 +1,21 @@
 php solver.php<< EOF
-4 4 2
-A 1 1
-B 4 4
+3
+paiza
+apple
+letter
 EOF
 echo
 php solver.php<< EOF
-5 5 5
-A 3 3
-B 1 1
-C 1 5
-D 5 5
-E 5 1
+3
+poh
+p
+oh
+EOF
+echo
+php solver.php<< EOF
+3
+paiza
+iza
+paiza
 EOF
 echo

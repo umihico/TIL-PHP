@@ -16,74 +16,36 @@ function stdin_to_intvals() {
 }
 function stdin_handler()
 {
-  list($y_size,$x_size,$country_num)=stdin_to_intvals();
-  for ($i=0; $i < $country_num; $i++) {
-    list($name,$x,$y)=str_split(trim(fgets(STDIN)));
-    $countries[$name]=array($x,$y);
+  $n=stdin_to_intval();
+  for ($i=0; $i < $n; $i++) {
+    $words[]=trim(fgets(STDIN));
   }
-  return array($country_num,$y_size,$x_size,$countries);
+  return array($words);
 }
 
-function iter_around_cells($y_size,$x_size,$r,$c)
+function combine($new_word,$adding_word)
 {
-  $around_pos=array(array(1,0),array(-1,0),array(0,-1),array(0,1));
-  foreach ($around_pos as $value) {
-    $y=$r+$value[0];
-    $x=$c+$value[1];
-    if ($y>=0 && $y<$y_size && $x>=0 && $x<$x_size){
-      yield array($y,$x);
+  $new_list=str_split($new_word);
+  $adding_list=str_split($adding_word);
+  $return_word=$new_word.$adding_word;
+  for ($i=0; $i < min(count($new_list),count($adding_list)); $i++) {
+    // echo substr($new_word,-$i-1,$i+1).",".substr($adding_word,0,$i+1)."\n";
+    if (substr($new_word,-$i-1,$i+1)==substr($adding_word,0,$i+1)){
+      // echo "hit!\n";
+      $return_word=substr($new_word,0,-$i-1).$adding_word;
     }
   }
+  return $return_word;
+
 }
 
-function solve($country_num,$y_size,$x_size,$countries)
+function solve($words)
 {
-  for ($i=0; $i < $y_size; $i++) {
-    $grid[]=array_fill(0,$x_size,0);
+  $new_word=$words[0];
+  for ($i=1; $i < count($words); $i++) {
+    $new_word=combine($new_word,$words[$i]);
   }
-  foreach ($countries as $name => list($x,$y)) {
-    $grid[$y][$x]=$name;
-  }
-  while (true) {
-    $new_grid=array();
-    $changed=false;
-    for ($r=0; $r < $y_size; $r++) {
-      $row=array();
-      for ($c=0; $c < $x_size; $c++) {
-        $current_color=$grid[$r][$c];
-        if ($current_color==0) {
-          $around_colors=array();
-          foreach (iter_around_cells($y_size,$x_size,$r,$c) as list($ar,$ac)) {
-            $around_color=$grid[$ar][$ac];
-            $around_colors[]=$around_color;
-          }
-          if (count($around_colors)==1) {
-            $new_grid[$r][$c]=$around_colors;
-            $changed=true;
-          }
-          if (count($around_colors)>1) {
-            $new_grid[$r][$c]="?";
-            $changed=true;
-          }
-        }
-      }
-    }
-    foreach ($new_grid as $r => $row) {
-      foreach ($row as $c => $new_color) {
-        $grid[$r][$c]=$new_color;
-      }
-    }
-    if (!$changed){
-      break;
-    }
-    for ($r=0; $r < $y_size; $r++) {
-      echo implode("",$grid[$r])."\n";
-    }
-  }
-  for ($r=0; $r < $y_size; $r++) {
-    echo implode("",$grid[$r])."\n";
-  }
-
+  echo trim($new_word);
 }
 function main()
 {

@@ -16,46 +16,57 @@ function stdin_to_intvals() {
 }
 function stdin_handler()
 {
+  $n_seconds=stdin_to_intval();
   list($y_size,$x_size)=stdin_to_intvals();
   for ($i=0; $i < $y_size; $i++) {
     $grid[]=str_split(trim(fgets(STDIN)));
     // code...
   }
-  list($x_pos,$y_pos)=stdin_to_intvals();
-  $x_pos--;
-  $y_pos--;
-  $move_num=stdin_to_intval();
-  for ($i=0; $i < $move_num; $i++) {
-    $directions[]=trim(fgets(STDIN));
-  }
-  return array($grid,$y_size,$x_size,$x_pos,$y_pos,$directions);
+  return array($grid,$n_seconds,$y_size,$x_size);
 }
 
 
-function solve($grid,$y_size,$x_size,$x_pos,$y_pos,$directions)
+function solve($grid,$n_seconds,$y_size,$x_size)
 {
   $direction_dict=array(
-    "U"=>array(-1,0),
-    "D"=>array(1,0),
-    "R"=>array(0,1),
-    "L"=>array(0,-1)
+    3=>array(0,1),
+    6=>array(1,0),
+    9=>array(0,-1),
+    0=>array(-1,0)
   );
-  foreach ($directions as $direction) {
-    // echo $direction."(".$y_pos.", ".$x_pos.")".$grid[$y_pos][$x_pos]."\n";
-    list($y_adj,$x_adj)=$direction_dict[$direction];
-    $y_pos=$y_pos+$y_adj;
-    $x_pos=$x_pos+$x_adj;
-    while ($y_pos>=0 && $y_pos<$y_size && $x_pos>=0 && $x_pos<$x_size && $grid[$y_pos][$x_pos] == "#"):
-      // echo "sripped\n";
-      $y_pos=$y_pos+$y_adj;
-      $x_pos=$x_pos+$x_adj;
-    endwhile;
-    while (!($y_pos>=0 && $y_pos<$y_size && $x_pos>=0 && $x_pos<$x_size)):
-      $y_pos=$y_pos-$y_adj;
-      $x_pos=$x_pos-$x_adj;
-    endwhile;
+  $turn_dict=array(
+    3=>6,
+    6=>9,
+    9=>0,
+    0=>3
+  );
+  $current_direction=3;
+  $y_pos=0;
+  $x_pos=0;
+  $cleaned_pos[]=$y_pos.",".$x_pos;
+  list($current_y_adj,$current_x_adj)=$direction_dict[$current_direction];
+  $time=0;
+  for ($i=0; $i < $n_seconds; $i++) {
+    // echo $y_pos.",".$x_pos."\n";
+    if ($grid[$y_pos][$x_pos]=='#'){
+      $time++;
+    }
+    $y_pos=$y_pos+$current_y_adj;
+    $x_pos=$x_pos+$current_x_adj;
+    if (!($y_pos>=0 && $y_pos<$y_size && $x_pos>=0 && $x_pos<$x_size) || in_array($y_pos.",".$x_pos,$cleaned_pos)){
+      $y_pos=$y_pos-$current_y_adj;
+      $x_pos=$x_pos-$current_x_adj;
+      $current_direction=$turn_dict[$current_direction];
+      list($current_y_adj,$current_x_adj)=$direction_dict[$current_direction];
+      $y_pos=$y_pos+$current_y_adj;
+      $x_pos=$x_pos+$current_x_adj;
+    }
+    if (!($y_pos>=0 && $y_pos<$y_size && $x_pos>=0 && $x_pos<$x_size)){
+      break;
+    }
+    $cleaned_pos[]=$y_pos.",".$x_pos;
   }
-  echo ($x_pos+1)." ".($y_pos+1);
+  echo $time;
 }
 function main()
 {

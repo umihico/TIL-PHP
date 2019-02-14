@@ -16,36 +16,35 @@ function stdin_to_intvals() {
 }
 function stdin_handler()
 {
+  list($home_to_paiza,$paiza_to_gino,$gino_to_corp)=stdin_to_intvals();
   $n=stdin_to_intval();
   for ($i=0; $i < $n; $i++) {
-    $words[]=trim(fgets(STDIN));
+    list($hour,$min)=stdin_to_intvals();
+    $times[]=$hour*60+$min;
   }
-  return array($words);
+  return array($home_to_paiza,$paiza_to_gino,$gino_to_corp,$times);
 }
 
-function combine($new_word,$adding_word)
+
+function solve($home_to_paiza,$paiza_to_gino,$gino_to_corp,$times)
 {
-  $new_list=str_split($new_word);
-  $adding_list=str_split($adding_word);
-  $return_word=$new_word.$adding_word;
-  for ($i=0; $i < min(count($new_list),count($adding_list)); $i++) {
-    // echo substr($new_word,-$i-1,$i+1).",".substr($adding_word,0,$i+1)."\n";
-    if (substr($new_word,-$i-1,$i+1)==substr($adding_word,0,$i+1)){
-      // echo "hit!\n";
-      $return_word=substr($new_word,0,-$i-1).$adding_word;
+  $arrive=8*60+59;
+  foreach ($times as $time) {
+    // echo $arrive."/".($time+$paiza_to_gino+$gino_to_corp)."\n";
+    if ($arrive>$time+$paiza_to_gino+$gino_to_corp){
+
+      $hour = floor($time/60);
+      $min = $time % 60;
+      // echo $hour.":".$min."\n";
+      $min_train_time=$time;
+      // break;
     }
   }
-  return $return_word;
+  $min_train_time = $min_train_time - $home_to_paiza;
+  $hour = floor($min_train_time/60);
+  $min = $min_train_time % 60;
+  echo str_pad($hour, 2, 0, STR_PAD_LEFT).":".str_pad($min, 2, 0, STR_PAD_LEFT);
 
-}
-
-function solve($words)
-{
-  $new_word=$words[0];
-  for ($i=1; $i < count($words); $i++) {
-    $new_word=combine($new_word,$words[$i]);
-  }
-  echo trim($new_word);
 }
 function main()
 {

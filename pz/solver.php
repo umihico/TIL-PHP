@@ -16,35 +16,44 @@ function stdin_to_intvals() {
 }
 function stdin_handler()
 {
-  list($repeat_num,$map)=explode(' ',trim(fgets(STDIN)));
-  $map=str_split($map);
-  $word=trim(fgets(STDIN));
-
-
-
-  return array($repeat_num,$map,$word);
+  list($y_size,$x_size)=stdin_to_intvals();
+  for ($i=0; $i < $y_size; $i++) {
+    $grid[]=str_split(trim(fgets(STDIN)));
+    // code...
+  }
+  list($x_pos,$y_pos)=stdin_to_intvals();
+  $x_pos--;
+  $y_pos--;
+  $move_num=stdin_to_intval();
+  for ($i=0; $i < $move_num; $i++) {
+    $directions[]=trim(fgets(STDIN));
+  }
+  return array($grid,$y_size,$x_size,$x_pos,$y_pos,$directions);
 }
 
 
-function solve($repeat_num,$map,$word)
+function solve($grid,$y_size,$x_size,$x_pos,$y_pos,$directions)
 {
-  $base_alphas = range('a', 'z');
-  foreach ($map as $i=>$letter) {
-    $new_map[$letter]=$base_alphas[$i];
+  $direction_dict=array(
+    "U"=>array(-1,0),
+    "D"=>array(1,0),
+    "R"=>array(0,1),
+    "L"=>array(0,-1)
+  );
+  foreach ($directions as $direction) {
+    list($y_adj,$x_adj)=$direction_dict[$direction];
+    $y_pos=$y_pos+$y_adj;
+    $x_pos=$x_pos+$x_adj;
+    while ($y_pos>=0 && $y_pos<$y_size && $x_pos>=0 && $x_pos<$x_size && $grid[$y_pos][$x_pos] == "#"):
+      $y_pos=$y_pos+$y_adj;
+      $x_pos=$x_pos+$x_adj;
+    endwhile;
+    while (!($y_pos>=0 && $y_pos<$y_size && $x_pos>=0 && $x_pos<$x_size)):
+      $y_pos=$y_pos-$y_adj;
+      $x_pos=$x_pos-$x_adj;
+    endwhile;
   }
-  $new_map[" "]=" ";
-  for ($i=0; $i < $repeat_num; $i++) {
-    $split_word=str_split($word);
-    $new_word=array();
-    foreach ($split_word as $letter) {
-      $new_letter=$new_map[$letter];
-      $new_word[]=$new_letter;
-    }
-    $word=implode("",$new_word);
-    // code...
-  }
-  echo $word;
-
+  echo $x_pos." ".$y_pos;
 }
 function main()
 {

@@ -1,10 +1,37 @@
 php solver.php<< EOF
-1 qwertyuiopasdfghjklzxcvbnm
-hqomq gfsoft iqeaqzigf
+5 5
+.###.
+#.#.#
+##..#
+..##.
+##..#
+3 3
+5
+U
+R
+D
+L
+U
 EOF
 echo
 php solver.php<< EOF
-100 poiuytrewqlkjhgfdsamnbvcxz
-snn xufu ngebmv qwtg
+10 10
+#.#.######
+..##...###
+##.#.###.#
+#.#.#...##
+....##..#.
+...#..#...
+..#.##.###
+..#.#.#.#.
+.##...#.##
+...#..#.##
+3 3
+5
+D
+D
+L
+D
+U
 EOF
 echo

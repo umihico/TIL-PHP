@@ -16,57 +16,74 @@ function stdin_to_intvals() {
 }
 function stdin_handler()
 {
-  $n_seconds=stdin_to_intval();
-  list($y_size,$x_size)=stdin_to_intvals();
-  for ($i=0; $i < $y_size; $i++) {
-    $grid[]=str_split(trim(fgets(STDIN)));
-    // code...
+  list($y_size,$x_size,$country_num)=stdin_to_intvals();
+  for ($i=0; $i < $country_num; $i++) {
+    list($name,$x,$y)=str_split(trim(fgets(STDIN)));
+    $countries[$name]=array($x,$y);
   }
-  return array($grid,$n_seconds,$y_size,$x_size);
+  return array($country_num,$y_size,$x_size,$countries);
 }
 
-
-function solve($grid,$n_seconds,$y_size,$x_size)
+function iter_around_cells($y_size,$x_size,$r,$c)
 {
-  $direction_dict=array(
-    3=>array(0,1),
-    6=>array(1,0),
-    9=>array(0,-1),
-    0=>array(-1,0)
-  );
-  $turn_dict=array(
-    3=>6,
-    6=>9,
-    9=>0,
-    0=>3
-  );
-  $current_direction=3;
-  $y_pos=0;
-  $x_pos=0;
-  $cleaned_pos[]=$y_pos.",".$x_pos;
-  list($current_y_adj,$current_x_adj)=$direction_dict[$current_direction];
-  $time=0;
-  for ($i=0; $i < $n_seconds; $i++) {
-    // echo $y_pos.",".$x_pos."\n";
-    if ($grid[$y_pos][$x_pos]=='#'){
-      $time++;
+  $around_pos=array(array(1,0),array(-1,0),array(0,-1),array(0,1));
+  foreach ($around_pos as $value) {
+    $y=$r+$value[0];
+    $x=$c+$value[1];
+    if ($y>=0 && $y<$y_size && $x>=0 && $x<$x_size){
+      yield array($y,$x);
     }
-    $y_pos=$y_pos+$current_y_adj;
-    $x_pos=$x_pos+$current_x_adj;
-    if (!($y_pos>=0 && $y_pos<$y_size && $x_pos>=0 && $x_pos<$x_size) || in_array($y_pos.",".$x_pos,$cleaned_pos)){
-      $y_pos=$y_pos-$current_y_adj;
-      $x_pos=$x_pos-$current_x_adj;
-      $current_direction=$turn_dict[$current_direction];
-      list($current_y_adj,$current_x_adj)=$direction_dict[$current_direction];
-      $y_pos=$y_pos+$current_y_adj;
-      $x_pos=$x_pos+$current_x_adj;
+  }
+}
+
+function solve($country_num,$y_size,$x_size,$countries)
+{
+  for ($i=0; $i < $y_size; $i++) {
+    $grid[]=array_fill(0,$x_size,0);
+  }
+  foreach ($countries as $name => list($x,$y)) {
+    $grid[$y][$x]=$name;
+  }
+  while (true) {
+    $new_grid=array();
+    $changed=false;
+    for ($r=0; $r < $y_size; $r++) {
+      $row=array();
+      for ($c=0; $c < $x_size; $c++) {
+        $current_color=$grid[$r][$c];
+        if ($current_color==0) {
+          $around_colors=array();
+          foreach (iter_around_cells($y_size,$x_size,$r,$c) as list($ar,$ac)) {
+            $around_color=$grid[$ar][$ac];
+            $around_colors[]=$around_color;
+          }
+          if (count($around_colors)==1) {
+            $new_grid[$r][$c]=$around_colors;
+            $changed=true;
+          }
+          if (count($around_colors)>1) {
+            $new_grid[$r][$c]="?";
+            $changed=true;
+          }
+        }
+      }
     }
-    if (!($y_pos>=0 && $y_pos<$y_size && $x_pos>=0 && $x_pos<$x_size)){
+    foreach ($new_grid as $r => $row) {
+      foreach ($row as $c => $new_color) {
+        $grid[$r][$c]=$new_color;
+      }
+    }
+    if (!$changed){
       break;
     }
-    $cleaned_pos[]=$y_pos.",".$x_pos;
+    for ($r=0; $r < $y_size; $r++) {
+      echo implode("",$grid[$r])."\n";
+    }
   }
-  echo $time;
+  for ($r=0; $r < $y_size; $r++) {
+    echo implode("",$grid[$r])."\n";
+  }
+
 }
 function main()
 {

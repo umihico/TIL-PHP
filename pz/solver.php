@@ -41,10 +41,12 @@ function solve($grid,$y_size,$x_size,$x_pos,$y_pos,$directions)
     "L"=>array(0,-1)
   );
   foreach ($directions as $direction) {
+    // echo $direction."(".$y_pos.", ".$x_pos.")".$grid[$y_pos][$x_pos]."\n";
     list($y_adj,$x_adj)=$direction_dict[$direction];
     $y_pos=$y_pos+$y_adj;
     $x_pos=$x_pos+$x_adj;
     while ($y_pos>=0 && $y_pos<$y_size && $x_pos>=0 && $x_pos<$x_size && $grid[$y_pos][$x_pos] == "#"):
+      // echo "sripped\n";
       $y_pos=$y_pos+$y_adj;
       $x_pos=$x_pos+$x_adj;
     endwhile;
@@ -53,7 +55,7 @@ function solve($grid,$y_size,$x_size,$x_pos,$y_pos,$directions)
       $x_pos=$x_pos-$x_adj;
     endwhile;
   }
-  echo $x_pos." ".$y_pos;
+  echo ($x_pos+1)." ".($y_pos+1);
 }
 function main()
 {

@@ -63,8 +63,25 @@ function request_directly()
   $response = $client->send($request, ['timeout' => 2]);
 }
 
+function getheader()
+{
+  $client = new Client();
+  $response = $client->get('http://httpbin.org/get');
+  $code = $response->getStatusCode(); // 200
+  $reason = $response->getReasonPhrase(); // OK
+  if ($response->hasHeader('Content-Length')) {
+      echo "It exists\n";
+      echo $response->getHeader('Content-Length')[0];
+  }
+
+  foreach ($response->getHeaders() as $name => $values) {
+      echo $name . ': ' . implode(', ', $values) . "\r\n";
+  }
+}
+
 // helloworld();
 // use_use();
 // use_base_uri();
 // methods();
-request_directly();
+// request_directly();
+getheader();

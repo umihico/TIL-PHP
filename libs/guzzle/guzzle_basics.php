@@ -78,10 +78,18 @@ function getheader()
       echo $name . ': ' . implode(', ', $values) . "\r\n";
   }
 }
+function send_query()
+{
+  $client = new Client();
+  $client->request('GET', 'http://httpbin.org', [
+    'query' => ['foo' => 'bar']
+  ]);
+}
 
 // helloworld();
 // use_use();
 // use_base_uri();
 // methods();
 // request_directly();
-getheader();
+// getheader();
+send_query();

@@ -100,6 +100,18 @@ function send_postform()
 ]);
 }
 
+function specify_header()
+{
+  $client = new Client();
+  $client->request('GET', 'http://httpbin.org/get', [
+    'headers' => [
+        'User-Agent' => 'testing/1.0',
+        'Accept'     => 'application/json',
+        'X-Foo'      => ['Bar', 'Baz']
+    ]
+  ]);
+}
+
 // helloworld();
 // use_use();
 // use_base_uri();
@@ -107,4 +119,5 @@ function send_postform()
 // request_directly();
 // getheader();
 // send_query();
-send_postform();
+// send_postform();
+specify_header();

@@ -85,6 +85,20 @@ function send_query()
     'query' => ['foo' => 'bar']
   ]);
 }
+function send_postform()
+{
+  $client = new Client();
+   // POST requests requires that you specify the POST fields as an array in the form_params request options.
+  $response = $client->request('POST', 'http://httpbin.org/post', [
+    'form_params' => [
+        'field_name' => 'abc',
+        'other_field' => '123',
+        'nested_field' => [
+            'nested' => 'hello'
+        ]
+    ]
+]);
+}
 
 // helloworld();
 // use_use();
@@ -92,4 +106,5 @@ function send_query()
 // methods();
 // request_directly();
 // getheader();
-send_query();
+// send_query();
+send_postform();

@@ -44,6 +44,21 @@ function use_base_uri()
 
 }
 
+function methods()
+{
+  $client = new Client();
+  $response = $client->get('http://httpbin.org/get');
+  $response = $client->delete('http://httpbin.org/delete');
+  $response = $client->head('http://httpbin.org/get');
+  $response = $client->options('http://httpbin.org/get');
+  $response = $client->patch('http://httpbin.org/patch');
+  $response = $client->post('http://httpbin.org/post');
+  $response = $client->put('http://httpbin.org/put');
+}
+
+
+
 // helloworld();
 // use_use();
-use_base_uri();
+// use_base_uri();
+methods();

@@ -60,6 +60,7 @@ use GuzzleHttp\Psr7\Request;
 function request_directly()
 {
   $request = new Request('PUT', 'http://httpbin.org/put');
+  $response = $client->send($request, ['timeout' => 2]);
 }
 
 // helloworld();

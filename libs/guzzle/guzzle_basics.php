@@ -56,9 +56,14 @@ function methods()
   $response = $client->put('http://httpbin.org/put');
 }
 
-
+use GuzzleHttp\Psr7\Request;
+function request_directly()
+{
+  $request = new Request('PUT', 'http://httpbin.org/put');
+}
 
 // helloworld();
 // use_use();
 // use_base_uri();
-methods();
+// methods();
+request_directly();

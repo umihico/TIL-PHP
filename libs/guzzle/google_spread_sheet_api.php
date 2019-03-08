@@ -1,7 +1,7 @@
 <?php
 require "vendor/autoload.php";
 // use GuzzleHttp\Client;
-global $headers;
+global $headers, $data;
 $headers=[
   "Content-type"=>"application/json",
   "Authorization"=>"Bearer ya29.GlvGBglwu10jwJYYskvkS1k0t3XqYDN6onbC-YoKt5sLIUebMmQzM_j5XT0rJXXVO660WnEQmBTR9phZpPbUlshwpTQJWbV1u7jXWdV1laXsGl-iJA0UdXp8sbv3" //will expires
@@ -18,7 +18,14 @@ function createNewSpreadsheet(){
     return $spread_sheet_id;
 }
 function fillCells($spread_sheet_id, $rows){
-
+    $rows_json=[];
+    foreach ($rows as $row) {
+      $row_json=[];
+      foreach ($row as $cell_value) {
+        $row_json[]=["userEnteredValue"=>["stringValue"=> $cell_value]];
+      }
+      $rows_json[]=[['values'=>$row_json]];
+    }
     global $headers;
     $body= [
       "requests"=> [
@@ -30,24 +37,7 @@ function fillCells($spread_sheet_id, $rows){
               "rowIndex"=> 0,
               "columnIndex"=> 0,
             ],
-            'rows'=>[
-              [
-                'values'=>[
-                  [],
-                  ["userEnteredValue"=>["stringValue"=> "国語"]],
-                  ["userEnteredValue"=>["stringValue"=> "算数"]],
-                  ["userEnteredValue"=>["stringValue"=> "理科"]],
-                ]
-              ],
-              [
-                'values'=>[
-                  ["userEnteredValue"=>["stringValue"=> "points"]],
-                  ["userEnteredValue"=>["stringValue"=> "１０"]],
-                  ["userEnteredValue"=>["stringValue"=> "２０"]],
-                  ["userEnteredValue"=>["stringValue"=> "３０"]],
-                ]
-              ]
-            ]
+            'rows'=>$rows_json
           ]
         ]
       ]
@@ -61,5 +51,8 @@ function createNewSpreadsheetFromArray(array $rows){
   $spread_sheet_id=createNewSpreadsheet();
   fillCells($spread_sheet_id, $rows);
 }
-$rows=array();
+$rows=[
+  ['a1','b1','c1'],
+  ['a2','b2','c2'],
+];
 createNewSpreadsheetFromArray($rows);
